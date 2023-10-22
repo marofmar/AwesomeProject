@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { addTodo } from '../redux/slices/todoSlice';
 
 const InputForm = () => {
-  const [currentValue, setCurrentValue] = useState("");
+  const [currentValue, setCurrentValue] = useState("");  // 이니셜 스테이트는 빈 문자열
   const dispatch = useDispatch();
   
   const handleSubmit = () => {
@@ -22,7 +22,7 @@ const InputForm = () => {
           style={styles.inputField}
           placeholder="새로운 할 일"
           value={currentValue}
-          onChangeText={text => setCurrentValue(text)}
+          onChangeText={setCurrentValue}
           onSubmitEditing={handleSubmit}  // Enter 키 눌렀을 때 호출
         />
         <Pressable style={styles.addButton} onPress={handleSubmit}>

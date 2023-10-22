@@ -22,7 +22,7 @@ const MainScreen = () => {
         {todoTasks.length !== 0 ? (
           <FlatList 
             data={todoTasks}
-            renterItem={({ item }) => <TodoItem {...item} />}
+            renderItem={({ item }) => <TodoItem {...item} />}
             keyExtractor={(item) => item.id}
           />
         ) :
