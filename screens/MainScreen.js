@@ -1,19 +1,47 @@
-import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
+import InputForm from '../components/InputForm'
+import TodoItem from '../components/TodoItem'
+import { useSelector } from 'react-redux'
 
 const MainScreen = () => {
+  const todos = useSelector(state => state.todo.todos);
+  const todoTasks = todos.filter((item) => item.state === 'todo');
+  const completedTasks = todos.filter((item) => item.state === 'done');
+  
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-      <Text style={styles.pageTitle}>Todo List</Text>
+      <StatusBar barStyle={"default"} />
+      <View style={styles.headerContainer}>
+        <Text style={styles.pageTitle}>Todo List</Text>
+      </View>
+      
       <View style={styles.listView}>
         <Text style={styles.listTitle}>할 일</Text>
+        {todoTasks.length !== 0 ? (
+          <FlatList 
+            data={todoTasks}
+            renterItem={({ item }) => <TodoItem {...item} />}
+            keyExtractor={(item) => item.id}
+          />
+        ) :
+          (<Text style={styles.emptyListText}>할 일이 없습니다.</Text>)
+        }
       </View>
       <View style={styles.separator}/>
       <View style={styles.listView}>
         <Text style={styles.listTitle}>완료된 일</Text>
+        {completedTasks.length !== 0 ? (
+          <FlatList
+            data={completedTasks}
+            renderItem={({ item }) => <TodoItem {...item} />}
+            keyExtractor={(item) => item.id}
+          />) :
+          (<Text style={styles.emptyListText}>완료된 일이 없습니다.</Text>)  
+        }
       </View>
+      <InputForm />
     </SafeAreaView>
   )
 }
@@ -36,7 +64,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 25,
     marginBottom: 10,
-    borderBottomWidth: 13,
+    borderBottomWidth: 1,
     borderBottomColor: "#F4E869"
   },
   listView: {
@@ -54,6 +82,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontSize: 15,
     lineHeight: 20,
-    color: "#3085C3"
+    color: "#3085C3"  // 아이템 폰트 컬러
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   }
 })
